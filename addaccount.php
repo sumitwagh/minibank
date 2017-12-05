@@ -25,7 +25,7 @@ if (isset($_POST['sub'])) {
 
     dd($result);
 
-
+    // comment sdfsdfsdf
 
 
     $sql = "INSERT INTO account (customername, accountno) VALUES ('$name', '$no')";
