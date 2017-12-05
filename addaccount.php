@@ -1,6 +1,10 @@
 <?php
 
-require 'vendor/autoload.php';
+function dd($arg) {
+  var_dump($arg);
+  die();
+}
+
 
 $servername = "localhost";
 $username = "root";
@@ -18,22 +22,27 @@ if (!$conn) {
 if (isset($_POST['sub'])) {
 
     $name = $_POST['name'];
-    $no = (rand(1000,10000));
 
-    $qu = "SELECT * FROM account WHERE accountno = '$no'";
-    $result = mysqli_query($conn, $qu);
+    $query = "SELECT accountno FROM account ORDER BY id DESC LIMIT 1";
 
-    dd($result);
+    $result = mysqli_fetch_assoc(mysqli_query($conn, $query));
 
-    // comment sdfsdfsdf
+    $lastAccountNo = $result['accountno'];
 
-
-    $sql = "INSERT INTO account (customername, accountno) VALUES ('$name', '$no')";
-
-    if (mysqli_multi_query($conn, $sql)) {
+    if(!$lastAccountNo) {
+      $sql = "INSERT INTO account (customername, accountno) VALUES ('$name', '1000')";
     } else {
+      $newAccountNo = $lastAccountNo + 1;
+      $sql = "INSERT INTO account (customername, accountno) VALUES ('$name', '$newAccountNo')";
+
+    }
+
+    if (!mysqli_multi_query($conn, $sql)) {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
+
+
+
 }
 
 
